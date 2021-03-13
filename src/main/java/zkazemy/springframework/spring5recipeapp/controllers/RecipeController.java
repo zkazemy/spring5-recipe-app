@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import zkazemy.springframework.spring5recipeapp.commands.RecipeCommand;
+import zkazemy.springframework.spring5recipeapp.domain.Recipe;
 import zkazemy.springframework.spring5recipeapp.services.RecipeService;
 
 @Controller
@@ -40,5 +41,13 @@ public class RecipeController {
     public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
         return "redirect:/recipe/" + savedCommand.getId().toString()+"/show";
+    }
+
+    @GetMapping
+    @RequestMapping("recipe/{id}/delete")
+    public String delete(@PathVariable String id)
+    {
+        recipeService.deleteById(Long.valueOf(id));
+        return "redirect:/";
     }
 }
