@@ -22,11 +22,4 @@ public class IndexController {
         model.addAttribute("recipes", recipeService.getRecipes());
         return "index";
     }
-    public void set()
-    {
-        String s="";
-    }
-
-
-
 }
