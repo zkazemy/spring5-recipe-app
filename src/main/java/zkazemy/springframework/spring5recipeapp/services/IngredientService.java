@@ -5,4 +5,6 @@ import zkazemy.springframework.spring5recipeapp.domain.Ingredient;
 
 public interface IngredientService {
     IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long id);
+
+    IngredientCommand saveIngredientCommand(IngredientCommand command);
 }
