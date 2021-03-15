@@ -3,6 +3,8 @@ package zkazemy.springframework.spring5recipeapp.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import zkazemy.springframework.spring5recipeapp.commands.RecipeCommand;
@@ -13,6 +15,7 @@ import zkazemy.springframework.spring5recipeapp.services.RecipeService;
 @Controller
 public class RecipeController {
     private final RecipeService recipeService;
+    private static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
 
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
@@ -39,12 +42,22 @@ public class RecipeController {
 
 //    @RequestMapping(name="recipe", method = RequestMethod.POST)
 //or
-    @PostMapping
-    @RequestMapping("recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
-        RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
-        return "redirect:/recipe/" + savedCommand.getId().toString()+"/show";
+@PostMapping("recipe")
+public String saveOrUpdate( @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult){
+
+    if(bindingResult.hasErrors()){
+
+        bindingResult.getAllErrors().forEach(objectError -> {
+//            log.debug(objectError.toString());
+        });
+
+        return RECIPE_RECIPEFORM_URL;
     }
+
+    RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
+
+    return "redirect:/recipe/" + savedCommand.getId() + "/show";
+}
 
     @GetMapping
     @RequestMapping("recipe/{id}/delete")
