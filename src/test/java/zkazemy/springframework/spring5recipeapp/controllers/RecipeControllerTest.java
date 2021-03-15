@@ -1,5 +1,6 @@
 package zkazemy.springframework.spring5recipeapp.controllers;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +16,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import zkazemy.springframework.spring5recipeapp.commands.RecipeCommand;
 import zkazemy.springframework.spring5recipeapp.domain.Recipe;
+import zkazemy.springframework.spring5recipeapp.exceptions.NotFoundException;
 import zkazemy.springframework.spring5recipeapp.repositories.RecipeRepository;
 import zkazemy.springframework.spring5recipeapp.services.RecipeService;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,4 +130,28 @@ class RecipeControllerTest {
                 .andExpect(view().name("redirect:/"));
         verify(recipeService, times(1)).deleteById(anyLong());
     }
+
+
+    @Test
+    public void getRecipeByIdTestNotFound() throws Exception
+    {
+       Recipe recipe = new Recipe();
+       recipe.setId(1L);
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+      mockMvc.perform(get("/recipe/1/show"))
+              .andExpect(status().isNotFound())
+               .andExpect(view().name("404error"));
+
+    }
+
+    @Test
+    public void getRecipeByIdTestNumberFormatException() throws Exception
+    {
+        mockMvc.perform(get("/recipe/asdfdf/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
+
+    }
+
 }

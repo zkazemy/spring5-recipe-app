@@ -3,11 +3,13 @@ package zkazemy.springframework.spring5recipeapp.services;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import zkazemy.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import zkazemy.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import zkazemy.springframework.spring5recipeapp.domain.Recipe;
+import zkazemy.springframework.spring5recipeapp.exceptions.NotFoundException;
 import zkazemy.springframework.spring5recipeapp.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -79,6 +81,15 @@ public class RecipeServiceImplTest {
         Long idToDelete = Long.valueOf(2L);
         recipeService.deleteById(idToDelete);
         verify(recipeRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getRecipeByIdTestNotFound() throws Exception
+    {
+        Optional<Recipe> recipeOptional = Optional.empty();
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+         Recipe recipe= recipeService.findById(1L);
+
     }
 
 }

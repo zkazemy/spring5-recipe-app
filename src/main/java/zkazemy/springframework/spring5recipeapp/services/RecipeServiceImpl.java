@@ -6,6 +6,7 @@ import zkazemy.springframework.spring5recipeapp.commands.RecipeCommand;
 import zkazemy.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import zkazemy.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import zkazemy.springframework.spring5recipeapp.domain.Recipe;
+import zkazemy.springframework.spring5recipeapp.exceptions.NotFoundException;
 import zkazemy.springframework.spring5recipeapp.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -36,7 +37,7 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe findById(Long id) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if (!recipe.isPresent()) {
-            throw new RuntimeException("not found");
+            throw new NotFoundException("Recipe Not Found");
         } else
             return recipe.get();
     }
