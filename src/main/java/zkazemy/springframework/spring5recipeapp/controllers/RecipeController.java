@@ -55,7 +55,7 @@ public class RecipeController {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(NotFoundException.class)//mange exception inner a controller
     public ModelAndView handleNotFound()
     {
         ModelAndView modelAndView = new ModelAndView();
@@ -63,13 +63,5 @@ public class RecipeController {
         return modelAndView;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView handleNumberFormatException(Exception ex)
-    {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("400error");
-        modelAndView.addObject("exception", ex);
-        return modelAndView;
-    }
+
 }
